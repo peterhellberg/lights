@@ -27,12 +27,14 @@ Usage of lights:
   -bk value
     	set Key Light brightness to an absolute (between 0 and 100) or relative (-N or +N) percentage
   -c	calculate and set the appropriate circadian lighting values
-  -i	display the current status of an Elgato Key Light without changing its state
+  -i	display the current status of the lights without changing their state
   -tf value
     	set Fill Light temperature to an absolute (between 2900 and 7000) or relative (-N or +N) degrees
   -tk value
     	set Key Light temperature to an absolute (between 2900 and 7000) or relative (-N or +N) degrees
 ```
+
+> I have also bound `Ctrl+F11` to toggle the Key Light, and `Ctrl+F12` to toggle the Fill Light.
 
 ## Technical details
 
