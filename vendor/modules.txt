@@ -1,0 +1,3 @@
+# github.com/mdlayher/keylight v0.0.0-20220301141403-32730232aa70
+## explicit; go 1.17
+github.com/mdlayher/keylight

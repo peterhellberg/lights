@@ -1,0 +1,4 @@
+github.com/google/go-cmp v0.5.7 h1:81/ik6ipDQS2aGcBfIN5dHDB36BwrStyeAQquSYCV4o=
+github.com/mdlayher/keylight v0.0.0-20220301141403-32730232aa70 h1:VXWnE2qjl7ipOw4FBuFVCfwfc/tW5WHTgQ7eu9Z4VQQ=
+github.com/mdlayher/keylight v0.0.0-20220301141403-32730232aa70/go.mod h1:+I4Pj8MDe30T6j+zG/mk4zKKopfAhHkiqAKoAg7Pyps=
+golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 h1:go1bK/D/BFZV2I8cIQd1NKEZ+0owSTG1fDTci4IqFcE=
