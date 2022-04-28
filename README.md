@@ -15,6 +15,7 @@ A command line tool for circadian lighting at my desk.
 ```
 lights      # Toggles both of the lights ON or OFF
 lights -i   # Show information about the current state
+lights -c   # Calculate and set the appropriate circadian lighting values
 ```
 
 ```go
