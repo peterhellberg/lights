@@ -15,6 +15,25 @@ lights      # Toggles both of the lights ON or OFF
 lights -i   # Show information about the current state
 ```
 
+```sh
+$ lights --help
+Usage of lights:
+  -af string
+    	the address of the Fill Light's HTTP API (default "http://filllight:9123")
+  -ak string
+    	the address of the Key Light's HTTP API (default "http://keylight:9123")
+  -bf value
+    	set Fill Light brightness to an absolute (between 0 and 100) or relative (-N or +N) percentage
+  -bk value
+    	set Key Light brightness to an absolute (between 0 and 100) or relative (-N or +N) percentage
+  -c	calculate and set the appropriate circadian lighting values
+  -i	display the current status of an Elgato Key Light without changing its state
+  -tf value
+    	set Fill Light temperature to an absolute (between 2900 and 7000) or relative (-N or +N) degrees
+  -tk value
+    	set Key Light temperature to an absolute (between 2900 and 7000) or relative (-N or +N) degrees
+```
+
 ## Technical details
 
 The heavy lifting is performed by [github.com/mdlayher/keylight](https://github.com/mdlayher/keylight/)
