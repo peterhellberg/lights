@@ -72,7 +72,43 @@ func main() {
 }
 
 func (s *State) setCircadianValues(now time.Time) {
+	// TODO: This should be replaced by a curve instead
+	b, t := 25, 2900
 
+	switch now.Hour() {
+	case 8:
+		b, t = 35, 3750
+	case 9:
+		b, t = 100, 4600
+	case 10:
+		b, t = 100, 5400
+	case 11:
+		b, t = 100, 5400
+	case 12:
+		b, t = 100, 6500
+	case 13:
+		b, t = 100, 5400
+	case 14:
+		b, t = 100, 5400
+	case 15:
+		b, t = 100, 4600
+	case 16:
+		b, t = 100, 3750
+	case 17:
+		b, t = 100, 2900
+	case 18:
+		b, t = 75, 2900
+	case 19:
+		b, t = 50, 2900
+	}
+
+	// Set the Key Light values
+	s.Key.Brightness.Set(strconv.Itoa(b))
+	s.Key.Temperature.Set(strconv.Itoa(t))
+
+	// Set the Fill Light values
+	s.Fill.Brightness.Set(strconv.Itoa(b - 25))
+	s.Fill.Temperature.Set(strconv.Itoa(t - 500))
 }
 
 func (s *State) handleLight(ctx context.Context, light Light) error {
@@ -94,20 +130,12 @@ func (s *State) handleLight(ctx context.Context, light Light) error {
 	if s.Info {
 		// Log info and don't modify any settings.
 		logInfo(d, lights)
+
 		return nil
 	}
 
 	for _, l := range lights {
-		if light.Brightness.relative {
-			l.Brightness += light.Brightness.number
-		} else if light.Brightness.set {
-			l.Brightness = light.Brightness.number
-		}
-		if light.Temperature.relative {
-			l.Temperature += light.Temperature.number
-		} else if light.Temperature.set {
-			l.Temperature = light.Temperature.number
-		}
+		modifyLight(l, light)
 
 		if s.Toggle {
 			l.On = !l.On
@@ -124,6 +152,39 @@ func (s *State) handleLight(ctx context.Context, light Light) error {
 	logInfo(d, lights)
 
 	return nil
+}
+
+// Modify the individual light with the requested brightness and temperature number
+func modifyLight(l *keylight.Light, light Light) {
+	if light.Brightness.relative {
+		l.Brightness += light.Brightness.number
+	} else if light.Brightness.set {
+		l.Brightness = light.Brightness.number
+	}
+	if light.Temperature.relative {
+		l.Temperature += light.Temperature.number
+	} else if light.Temperature.set {
+		l.Temperature = light.Temperature.number
+	}
+
+	boundsCheck(l)
+}
+
+// Check if the brightess or temperature is out of bounds
+func boundsCheck(l *keylight.Light) {
+	switch {
+	case l.Brightness < 3:
+		l.Brightness = 3
+	case l.Brightness > 100:
+		l.Brightness = 100
+	}
+
+	switch {
+	case l.Temperature < 2900:
+		l.Temperature = 2900
+	case l.Temperature > 7000:
+		l.Brightness = 7000
+	}
 }
 
 type signedNumber struct {
