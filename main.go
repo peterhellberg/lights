@@ -126,50 +126,55 @@ func (p signedNumber) String() string {
 	if !p.set {
 		return ""
 	}
+
 	if p.relative {
 		return fmt.Sprintf("%+d", p.number)
 	}
+
 	return fmt.Sprintf("%d", p.number)
 }
 
 func (p *signedNumber) Set(s string) error {
 	*p = signedNumber{}
+
 	if s == "" {
 		return nil
 	}
+
 	p.set = true
 	negative := false
+
 	if s[0] == '-' || s[0] == '+' {
 		p.relative = true
 		negative = s[0] == '-'
 		s = s[1:]
 	}
+
 	n, err := strconv.Atoi(s)
 	if err != nil {
 		return err
 	}
+
 	if negative {
 		p.number = -n
 	} else {
 		p.number = n
 	}
+
 	return nil
 }
 
 // logInfo logs information about a device and its lights.
 func logInfo(d *keylight.Device, ls []*keylight.Light) {
 	name := d.DisplayName
-	if name == "" {
-		name = d.SerialNumber
-	}
 
 	for _, l := range ls {
-		onOff := "OFF"
+		onOff := "🚫"
+
 		if l.On {
-			onOff = fmt.Sprintf("ON: temperature %dK, brightness %d%%",
-				l.Temperature, l.Brightness)
+			onOff = "💡"
 		}
 
-		log.Printf("%s %s", name, onOff)
+		log.Printf("%s %s %dK %d%%", onOff, name, l.Temperature, l.Brightness)
 	}
 }
