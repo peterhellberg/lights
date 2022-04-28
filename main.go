@@ -14,10 +14,11 @@ import (
 )
 
 type State struct {
-	Info   bool
-	Toggle bool
-	Key    Light
-	Fill   Light
+	Info      bool
+	Circadian bool
+	Toggle    bool
+	Key       Light
+	Fill      Light
 }
 
 type Light struct {
@@ -26,20 +27,25 @@ type Light struct {
 	Temperature signedNumber
 }
 
-func newState() *State {
+func newState(now time.Time) *State {
 	s := &State{}
 
 	flag.BoolVar(&s.Info, "i", false, "display the current status of an Elgato Key Light without changing its state")
+	flag.BoolVar(&s.Circadian, "c", false, "calculate and set the appropriate circadian lighting values")
 
-	flag.StringVar(&s.Key.Addr, "ka", "http://keylight:9123", "the address of the Key Light's HTTP API")
-	flag.Var(&s.Key.Brightness, "kb", "set Key Light brightness to an absolute (between 0 and 100) or relative (-N or +N) percentage")
-	flag.Var(&s.Key.Temperature, "kt", "set Key Light temperature to an absolute (between 2900 and 7000) or relative (-N or +N) degrees")
+	flag.StringVar(&s.Key.Addr, "ak", "http://keylight:9123", "the address of the Key Light's HTTP API")
+	flag.Var(&s.Key.Brightness, "bk", "set Key Light brightness to an absolute (between 0 and 100) or relative (-N or +N) percentage")
+	flag.Var(&s.Key.Temperature, "tk", "set Key Light temperature to an absolute (between 2900 and 7000) or relative (-N or +N) degrees")
 
-	flag.StringVar(&s.Fill.Addr, "fa", "http://filllight:9123", "the address of the Fill Light's HTTP API")
-	flag.Var(&s.Fill.Brightness, "fb", "set Fill Light brightness to an absolute (between 0 and 100) or relative (-N or +N) percentage")
-	flag.Var(&s.Fill.Temperature, "ft", "set Fill Light temperature to an absolute (between 2900 and 7000) or relative (-N or +N) degrees")
+	flag.StringVar(&s.Fill.Addr, "af", "http://filllight:9123", "the address of the Fill Light's HTTP API")
+	flag.Var(&s.Fill.Brightness, "bf", "set Fill Light brightness to an absolute (between 0 and 100) or relative (-N or +N) percentage")
+	flag.Var(&s.Fill.Temperature, "tf", "set Fill Light temperature to an absolute (between 2900 and 7000) or relative (-N or +N) degrees")
 
 	flag.Parse()
+
+	if s.Circadian {
+		s.setCircadianValues(now)
+	}
 
 	// Only toggle the light if no modification flags are set.
 	s.Toggle = !s.Key.Brightness.set && !s.Key.Temperature.set &&
@@ -49,7 +55,7 @@ func newState() *State {
 }
 
 func main() {
-	s := newState()
+	s := newState(time.Now())
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -63,6 +69,10 @@ func main() {
 	if err := s.handleLight(ctx, s.Fill); err != nil {
 		log.Fatal(err)
 	}
+}
+
+func (s *State) setCircadianValues(now time.Time) {
+
 }
 
 func (s *State) handleLight(ctx context.Context, light Light) error {

@@ -15,7 +15,7 @@ lights      # Toggles both of the lights ON or OFF
 lights -i   # Show information about the current state
 ```
 
-```sh
+```go
 $ lights --help
 Usage of lights:
   -af string
