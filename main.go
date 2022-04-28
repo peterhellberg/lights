@@ -79,15 +79,15 @@ func (s *State) setCircadianValues(now time.Time) {
 	case 8:
 		b, t = 35, 3750
 	case 9:
-		b, t = 100, 4600
+		b, t = 50, 4600
 	case 10:
-		b, t = 100, 5400
+		b, t = 75, 5400
 	case 11:
-		b, t = 100, 5400
+		b, t = 100, 5950
 	case 12:
 		b, t = 100, 6500
 	case 13:
-		b, t = 100, 5400
+		b, t = 100, 5950
 	case 14:
 		b, t = 100, 5400
 	case 15:
@@ -95,11 +95,11 @@ func (s *State) setCircadianValues(now time.Time) {
 	case 16:
 		b, t = 100, 3750
 	case 17:
-		b, t = 100, 2900
-	case 18:
 		b, t = 75, 2900
-	case 19:
+	case 18:
 		b, t = 50, 2900
+	case 19:
+		b, t = 35, 2900
 	}
 
 	// Set the Key Light values

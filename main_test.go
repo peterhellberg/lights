@@ -15,9 +15,9 @@ func TestStateSetCircadianValues(t *testing.T) {
 		fillBrightness  int
 		fillTemperature int
 	}{
-		{"1:02PM", 100, 5400, 75, 4900},
+		{"1:02PM", 100, 5950, 75, 5450},
 		{"3:04PM", 100, 4600, 75, 4100},
-		{"6:35PM", 75, 2900, 50, 2400},
+		{"6:35PM", 50, 2900, 25, 2400},
 	} {
 		t.Run(tt.value, func(t *testing.T) {
 			now, err := time.Parse(time.Kitchen, tt.value)
