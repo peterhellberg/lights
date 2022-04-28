@@ -1,4 +1,6 @@
-# lights: A command line tool for circadian lighting at my desk
+# 💡💡 `lights`
+
+A command line tool for circadian lighting at my desk.
 
 > Note: This code is meant for my own use, written as a lab day project, do not expect much.
 
@@ -15,7 +17,7 @@ lights -i   # Show information about the current state
 
 ## Technical details
 
-The heavy lifting is performed by [github.com/mdlayher/keylight](https://github.com/mdlayher/keylight/).
+The heavy lifting is performed by [github.com/mdlayher/keylight](https://github.com/mdlayher/keylight/)
 
 <img src="https://assets.c7.se/svg/viking-gopher.svg" align="right" width="30%" height="300">
 
