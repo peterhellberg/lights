@@ -72,43 +72,47 @@ func main() {
 }
 
 func (s *State) setCircadianValues(now time.Time) {
-	// TODO: This should be replaced by a curve instead
-	b, t := 25, 2900
+	// Terms calculated using https://arachnoid.com/polysolve/
+	var (
+		temperature = Terms{
+			-3.5291705854932894e+005,
+			3.3370783920879198e+003,
+			-1.2843130401833401e+001,
+			2.5808472494611805e-002,
+			-2.8387358858683313e-005,
+			1.6188403278442254e-008,
+			-3.7473156631821204e-012,
+		}
 
-	switch now.Hour() {
-	case 8:
-		b, t = 35, 3750
-	case 9:
-		b, t = 50, 4600
-	case 10:
-		b, t = 75, 5400
-	case 11:
-		b, t = 100, 5950
-	case 12:
-		b, t = 100, 6500
-	case 13:
-		b, t = 100, 5950
-	case 14:
-		b, t = 100, 5400
-	case 15:
-		b, t = 100, 4600
-	case 16:
-		b, t = 100, 3750
-	case 17:
-		b, t = 75, 2900
-	case 18:
-		b, t = 50, 2900
-	case 19:
-		b, t = 35, 2900
-	}
+		brightness = Terms{
+			-3.5655944055948703e+002,
+			1.2559440559442696e+000,
+			-8.7218337218368438e-004,
+			1.4558796534541381e-019,
+		}
+	)
+
+	b := int(brightness.at(now, 20, 100))
+	t := int(temperature.at(now, 2900, 7000))
 
 	// Set the Key Light values
 	s.Key.Brightness.Set(strconv.Itoa(b))
 	s.Key.Temperature.Set(strconv.Itoa(t))
 
 	// Set the Fill Light values
-	s.Fill.Brightness.Set(strconv.Itoa(b - 25))
-	s.Fill.Temperature.Set(strconv.Itoa(t - 500))
+
+	var bf, tf int
+
+	if b > 20 {
+		bf = b - 20
+	}
+
+	if t > 500 {
+		tf = t - 500
+	}
+
+	s.Fill.Brightness.Set(strconv.Itoa(bf))
+	s.Fill.Temperature.Set(strconv.Itoa(tf))
 }
 
 func (s *State) handleLight(ctx context.Context, light Light) error {
@@ -247,5 +251,41 @@ func logInfo(d *keylight.Device, ls []*keylight.Light) {
 		}
 
 		log.Printf("%s %s %dK %d%%", onOff, name, l.Temperature, l.Brightness)
+	}
+}
+
+type Terms []float64
+
+func (terms Terms) at(t time.Time, min, max float64) float64 {
+	return clamp(terms.regress(minutes(t)), min, max)
+}
+
+func (terms Terms) regress(x float64) float64 {
+	t, r := 1.0, 0.0
+
+	for _, c := range terms {
+		r += c * t
+		t *= x
+	}
+
+	return r
+}
+
+func minutes(t time.Time) float64 {
+	year, month, day := t.Date()
+
+	t2 := time.Date(year, month, day, 0, 0, 0, 0, t.Location())
+
+	return t.Sub(t2).Minutes()
+}
+
+func clamp(v, min, max float64) float64 {
+	switch {
+	case v < min:
+		return min
+	case v > max:
+		return max
+	default:
+		return v
 	}
 }
