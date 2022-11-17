@@ -6,7 +6,7 @@ A command line tool for circadian lighting at my desk.
 
 ## Circadian Lighting
 
-![Circadian Lighting Diagram](https://aws1.discourse-cdn.com/free1/uploads/wled/optimized/2X/2/24c03aa4e803b47a723a0a28737b7047fffb2cfd_2_1380x780.jpeg)
+![Circadian Lighting Diagram](https://www.thelightingpractice.com/wp-content/uploads/2018/08/Sunset-Photo-Academic-Publication-Graphic.jpg)
 
 ![Temperature Chart](https://i.imgur.com/NiAdlGj.png)
 
